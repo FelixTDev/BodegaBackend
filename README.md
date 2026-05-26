@@ -56,22 +56,32 @@ Backend FastAPI modular construido a partir de la lógica real del documento `/U
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 ## Configuración `.env`
 
+Copia el archivo de ejemplo y edítalo:
+
 ```bash
-cp .env.example .env
+copy .env.example .env
 ```
 
 Variables clave:
-- `DATABASE_URL`
+- `DATABASE_URL` → ejemplo: `mysql+pymysql://root:@localhost/camuchita_db`
 - `SECRET_KEY`
 - `ALGORITHM`
 - `ACCESS_TOKEN_EXPIRE_MINUTES`
 - `REFRESH_TOKEN_EXPIRE_DAYS`
+
+> Si tu MySQL no tiene contraseña, deja vacío el campo entre `:` y `@`
+
+## Requisitos previos
+
+- Python 3.8+ (probado en 3.12)
+- MySQL 5.7+ con la base de datos `camuchita_db` creada
+- Ejecutar el script `camuchita.db` para crear las tablas
 
 ## Ejecutar servidor
 
