@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CategoriaCreate(BaseModel):
@@ -7,7 +7,6 @@ class CategoriaCreate(BaseModel):
 
 
 class CategoriaResponse(CategoriaCreate):
-    id: int
+    model_config = ConfigDict(from_attributes=True)
 
-    class Config:
-        from_attributes = True
+    id: int

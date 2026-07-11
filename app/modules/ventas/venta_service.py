@@ -118,3 +118,6 @@ class VentaService:
         except Exception:
             self.repo.rollback()
             raise
+
+    def list(self):
+        return self.repo.list_sales()

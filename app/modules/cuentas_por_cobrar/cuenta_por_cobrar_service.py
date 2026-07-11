@@ -75,3 +75,9 @@ class CuentaPorCobrarService:
         except Exception:
             self.repo.rollback()
             raise
+
+    def list_accounts(self):
+        return self.repo.list_accounts()
+
+    def list_payments(self):
+        return self.repo.list_payments()

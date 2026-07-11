@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import AppException
 from app.core.security import (
+    TokenError,
     create_access_token,
     create_refresh_token,
     decode_token,
@@ -38,7 +39,10 @@ class AutenticacionService:
         return self._construir_tokens(str(user.id), user.role)
 
     def refrescar_token(self, payload: RefreshRequest):
-        token_data = decode_token(payload.refresh_token)
+        try:
+            token_data = decode_token(payload.refresh_token)
+        except TokenError as exc:
+            raise AppException("Refresh token inválido", status_code=status.HTTP_401_UNAUTHORIZED) from exc
         if token_data.get("type") != "refresh":
             raise AppException("Refresh token inválido", status_code=status.HTTP_401_UNAUTHORIZED)
 

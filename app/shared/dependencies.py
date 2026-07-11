@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.core.exceptions import AppException
-from app.core.security import decode_token
+from app.core.security import TokenError, decode_token
 from app.modules.usuarios.usuario_model import Usuario
 from app.modules.usuarios.usuario_repository import UsuarioRepository
 
@@ -12,7 +12,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> Usuario:
-    payload = decode_token(token)
+    try:
+        payload = decode_token(token)
+    except TokenError as exc:
+        raise AppException("Token invalido o expirado.", status_code=status.HTTP_401_UNAUTHORIZED) from exc
 
     if payload.get("type") != "access":
         raise AppException("Token de acceso inválido.", status_code=status.HTTP_401_UNAUTHORIZED)

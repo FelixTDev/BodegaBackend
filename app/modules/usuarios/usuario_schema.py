@@ -12,6 +12,10 @@ class UsuarioCreate(UsuarioBase):
     password: str = Field(min_length=8, max_length=128)
 
 
+class UsuarioAdminCreate(UsuarioCreate):
+    role: Literal["admin", "user"] = "user"
+
+
 class UsuarioUpdate(BaseModel):
     full_name: str | None = Field(default=None, min_length=2, max_length=140)
     password: str | None = Field(default=None, min_length=8, max_length=128)

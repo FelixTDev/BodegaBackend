@@ -48,3 +48,11 @@ def test_protected_route_without_token():
     response = client.get("/api/auth/me")
     assert response.status_code == 401
     assert response.json()["success"] is False
+
+
+def test_protected_route_with_invalid_token_returns_401():
+    response = client.get("/api/auth/me", headers={"Authorization": "Bearer invalid-token"})
+    assert response.status_code == 401
+    body = response.json()
+    assert body["success"] is False
+    assert "token" in body["message"].lower()

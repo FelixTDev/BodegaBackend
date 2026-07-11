@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class ProveedorCreate(BaseModel):
@@ -10,8 +10,7 @@ class ProveedorCreate(BaseModel):
 
 
 class ProveedorResponse(ProveedorCreate):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     active: bool
-
-    class Config:
-        from_attributes = True

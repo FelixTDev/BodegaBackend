@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fastapi import status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import AppException
@@ -13,7 +14,16 @@ class CajaService:
         self.repo = CajaRepository(db)
 
     def create_box(self, name: str):
-        return self.repo.create_box(name)
+        try:
+            return self.repo.create_box(name)
+        except IntegrityError as exc:
+            raise AppException("Ya existe una caja con ese nombre.", status_code=status.HTTP_409_CONFLICT) from exc
+
+    def list_boxes(self):
+        return self.repo.list_boxes()
+
+    def list_sessions(self):
+        return self.repo.list_sessions()
 
     def open_session(self, caja_box_id: int, operation_date, opening_amount: float, usuario_id: int):
         existing = self.repo.get_open_session(caja_box_id, operation_date)

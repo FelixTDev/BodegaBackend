@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -21,6 +22,13 @@ class VentaCreate(BaseModel):
     details: list[DetalleVentaIn] = Field(min_length=1)
 
 
+class ClienteMiniResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    names: str
+    last_names: str | None = None
+
+
 class VentaResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -30,6 +38,10 @@ class VentaResponse(BaseModel):
     cliente_id: int | None
     caja_session_id: int
     usuario_id: int
+    subtotal: float
+    tax: float
     total: float
     payment_method: str | None
     status: str
+    created_at: datetime | None = None
+    cliente: ClienteMiniResponse | None = None

@@ -1,9 +1,11 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Numeric, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.modules.productos.producto_model import Producto
+from app.modules.usuarios.usuario_model import Usuario
 
 
 class MovimientoInventario(Base):
@@ -19,3 +21,6 @@ class MovimientoInventario(Base):
     usuario_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     observacion: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    producto: Mapped["Producto"] = relationship(lazy="joined")
+    usuario: Mapped["Usuario"] = relationship(lazy="joined")

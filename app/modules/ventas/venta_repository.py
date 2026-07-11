@@ -17,6 +17,10 @@ class VentaRepository:
         stmt = select(Venta).where(Venta.number == numero)
         return self.db.execute(stmt).scalar_one_or_none() is not None
 
+    def list_sales(self):
+        stmt = select(Venta).order_by(Venta.id.desc())
+        return self.db.execute(stmt).scalars().all()
+
     def get_caja_session(self, caja_session_id: int):
         return self.db.get(SesionCaja, caja_session_id)
 

@@ -15,6 +15,10 @@ class CompraRepository:
         stmt = select(Compra).where(Compra.document_number == numero)
         return self.db.execute(stmt).scalar_one_or_none() is not None
 
+    def list_purchases(self):
+        stmt = select(Compra).order_by(Compra.id.desc())
+        return self.db.execute(stmt).scalars().all()
+
     def get_proveedor(self, proveedor_id: int):
         return self.db.get(Proveedor, proveedor_id)
 

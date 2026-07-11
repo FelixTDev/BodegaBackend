@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -37,3 +37,4 @@ class SesionCajaResponse(BaseModel):
     theoretical_amount: float | None = None
     closing_difference: float | None = None
     status: str
+    opened_at: datetime | None = None

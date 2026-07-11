@@ -67,3 +67,6 @@ class CompraService:
         except Exception:
             self.repo.rollback()
             raise
+
+    def list(self):
+        return self.repo.list_purchases()

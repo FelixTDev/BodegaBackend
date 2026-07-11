@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -11,9 +12,21 @@ class CajaRepository:
     def create_box(self, name: str):
         box = Caja(name=name, active=True)
         self.db.add(box)
-        self.db.commit()
+        try:
+            self.db.commit()
+        except IntegrityError:
+            self.db.rollback()
+            raise
         self.db.refresh(box)
         return box
+
+    def list_boxes(self):
+        stmt = select(Caja).order_by(Caja.id.desc())
+        return self.db.execute(stmt).scalars().all()
+
+    def list_sessions(self):
+        stmt = select(SesionCaja).order_by(SesionCaja.id.desc())
+        return self.db.execute(stmt).scalars().all()
 
     def get_open_session(self, caja_box_id: int, operation_date):
         stmt = select(SesionCaja).where(

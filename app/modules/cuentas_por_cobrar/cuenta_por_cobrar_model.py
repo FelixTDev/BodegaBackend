@@ -1,9 +1,10 @@
 from datetime import date, datetime
 
 from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.modules.clientes.cliente_model import Cliente
 
 
 class CuentaPorCobrar(Base):
@@ -17,6 +18,8 @@ class CuentaPorCobrar(Base):
     issue_date: Mapped[date] = mapped_column(Date, nullable=False, default=date.today)
     due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
     status: Mapped[str] = mapped_column(String(12), nullable=False, default="PENDIENTE")
+
+    cliente: Mapped["Cliente"] = relationship(lazy="joined")
 
 
 class Abono(Base):

@@ -14,6 +14,14 @@ class CuentaPorCobrarRepository:
         stmt = select(Abono).where(Abono.document_number == numero)
         return self.db.execute(stmt).scalar_one_or_none() is not None
 
+    def list_accounts(self):
+        stmt = select(CuentaPorCobrar).order_by(CuentaPorCobrar.id.desc())
+        return self.db.execute(stmt).scalars().all()
+
+    def list_payments(self):
+        stmt = select(Abono).order_by(Abono.id.desc())
+        return self.db.execute(stmt).scalars().all()
+
     def get_account(self, account_id: int):
         return self.db.get(CuentaPorCobrar, account_id)
 

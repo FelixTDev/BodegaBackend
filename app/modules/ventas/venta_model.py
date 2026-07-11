@@ -1,9 +1,10 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Numeric, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.modules.clientes.cliente_model import Cliente
 
 
 class Venta(Base):
@@ -23,6 +24,8 @@ class Venta(Base):
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     cancellation_reason: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    cliente: Mapped["Cliente"] = relationship(lazy="joined")
 
 
 class DetalleVenta(Base):
