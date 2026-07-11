@@ -1,4 +1,6 @@
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
+from app.modules.proveedores.proveedor_schema import ProveedorResponse
 
 
 class DetalleCompraIn(BaseModel):
@@ -17,6 +19,15 @@ class CompraCreate(BaseModel):
     details: list[DetalleCompraIn] = Field(min_length=1)
 
 
+class DetalleCompraResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    producto_id: int
+    quantity: float
+    unit_cost: float
+
+
 class CompraResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -29,3 +40,6 @@ class CompraResponse(BaseModel):
     tax: float
     total: float
     status: str
+    created_at: datetime
+    proveedor: ProveedorResponse | None = None
+    details: list[DetalleCompraResponse] = []

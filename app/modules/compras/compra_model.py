@@ -1,9 +1,10 @@
 from datetime import date, datetime
 
 from sqlalchemy import Date, DateTime, ForeignKey, Numeric, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
+from app.modules.proveedores.proveedor_model import Proveedor
 
 
 class Compra(Base):
@@ -22,6 +23,9 @@ class Compra(Base):
     cancelled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     cancellation_reason: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    proveedor: Mapped["Proveedor"] = relationship(lazy="joined")
+    details: Mapped[list["DetalleCompra"]] = relationship(lazy="selectin")
 
 
 class DetalleCompra(Base):
