@@ -169,6 +169,26 @@ Rutas esperadas en local:
 - Swagger UI: `http://127.0.0.1:8000/docs`
 - OpenAPI JSON: `http://127.0.0.1:8000/openapi.json`
 
+## Ejecucion con Docker
+
+Construccion de imagen:
+
+```bash
+docker build -t bodega-backend .
+```
+
+Ejecucion del contenedor:
+
+```bash
+docker run --rm -p 8000:10000 --env-file .env bodega-backend
+```
+
+Notas:
+
+- El contenedor expone `10000` internamente y escucha `PORT`.
+- Para desarrollo local puedes mapear `8000:10000`.
+- La conexion MySQL debe apuntar a un host accesible desde el contenedor.
+
 ## Swagger / OpenAPI
 
 Swagger ya queda habilitado por FastAPI y documenta endpoints reales del proyecto.
@@ -305,20 +325,14 @@ La base de datos objetivo es MySQL en Railway.
 
 ### Runtime recomendado
 
-- Python 3.12
-- Archivo incluido: `runtime.txt`
+- Docker usando [Dockerfile](C:/Users/felix/Downloads/BodegaBackend/Dockerfile)
+- Blueprint configurado con `runtime: docker` en [render.yaml](C:/Users/felix/Downloads/BodegaBackend/render.yaml)
+- `runtime.txt` puede mantenerse como referencia de version Python local, pero Render tomara la version base de la imagen Docker
 
-### Build command
+### Build y arranque
 
-```bash
-pip install -r requirements.txt
-```
-
-### Start command recomendado
-
-```bash
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
-```
+- Render construira automaticamente la imagen desde `Dockerfile`
+- El arranque usa el `CMD` definido en la imagen
 
 ### Variables de entorno en Render
 
@@ -433,21 +447,10 @@ Resumen operativo:
 
 1. Sube los cambios a GitHub.
 2. Crea un `Web Service` en Render apuntando al repositorio o usa el blueprint de [render.yaml](C:/Users/felix/Downloads/BodegaBackend/render.yaml).
-3. Configura el `Build Command`:
-
-```bash
-pip install -r requirements.txt
-```
-
-4. Configura el `Start Command`:
-
-```bash
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
-```
-
-5. Carga las variables de entorno con las credenciales del MySQL de Railway.
-6. Despliega.
-7. Valida `GET /`, `GET /docs` y los endpoints principales.
+3. Selecciona despliegue con Docker si lo creas manualmente.
+4. Carga las variables de entorno con las credenciales del MySQL de Railway.
+5. Despliega.
+6. Valida `GET /`, `GET /docs` y los endpoints principales.
 
 ## Checklist final para produccion
 
