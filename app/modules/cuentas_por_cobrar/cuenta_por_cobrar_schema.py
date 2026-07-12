@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -43,4 +43,5 @@ class CuentaPorCobrarResponse(BaseModel):
     original_amount: float
     current_balance: float
     status: str
+    created_at: date | None = Field(default=None, validation_alias="issue_date")
     cliente: ClienteMiniResponse | None = None
